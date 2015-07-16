@@ -1,0 +1,57 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
+    // Enable the following classpath entry and observe that the extensions
+    // are not activated after the first Asciidoctor task
+    // The workaround is to add an explicit dependency on the AsciidoctorJ Groovy DSL
+    //classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.8'
+  }
+}
+
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctor {
+  attributes nofooter: true
+  sources {
+    include 'index.adoc'
+  }
+  extensions {
+    treeprocessor { doc ->
+      println 'treeprocessor extension in main task'
+      doc
+    }
+  }
+}
+
+task asciidoctorA(type: org.asciidoctor.gradle.AsciidoctorTask) {
+  outputDir "$buildDir/asciidoc-a"
+  attributes nofooter: true
+  sources {
+    include 'index.adoc'
+  }
+  extensions {
+    treeprocessor { doc ->
+      println 'treeprocessor extension in task asciidoctorA'
+      doc
+    }
+  }
+}
+
+task asciidoctorB(type: org.asciidoctor.gradle.AsciidoctorTask) {
+  dependsOn asciidoctorA
+  outputDir "$buildDir/asciidoc-b"
+  attributes nofooter: true
+  sources {
+    include 'index.adoc'
+  }
+  extensions {
+    treeprocessor { doc ->
+      println 'treeprocessor extension in task asciidoctorB'
+      doc
+    }
+  }
+}
