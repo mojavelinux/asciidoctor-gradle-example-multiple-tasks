@@ -1,3 +1,5 @@
+// Test using:
+// ./gradlew asciidoctor asciidoctorB
 buildscript {
   repositories {
     jcenter()
